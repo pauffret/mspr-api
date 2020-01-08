@@ -25,5 +25,7 @@ $app = new \Slim\App($c);
 
 $app->get('/cocktails', \Controllers\Cocktail::class . ':getCocktails');
 
+$app->get('/ingredients', \Controllers\Ingredient::class . ':getIngredients');
+
 
 $app->run();
