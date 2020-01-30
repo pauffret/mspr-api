@@ -4,8 +4,8 @@ namespace Config;
 
 class Bdd
 {
-    const DBNAME='apitise';
+    const DBNAME='sfondain_mspr_project';
     const HOST = 'localhost';
-    const USERNAME = 'root';
+    const USERNAME = 'sfondain';
     const PASSWORD = '';
 }
