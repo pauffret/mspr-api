@@ -22,9 +22,9 @@ $configuration = [
 $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 
+// url : http://localhost/apitise-cocktail/index.php/cocktails
 
 $app->get('/cocktails', \Controllers\Cocktail::class . ':getCocktails');
-
 $app->get('/ingredients', \Controllers\Ingredient::class . ':getIngredients');
 
 
