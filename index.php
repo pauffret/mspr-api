@@ -25,7 +25,7 @@ $app = new \Slim\App($c);
 // url : http://localhost/mspr-api/index.php/users
 
 $app->get('/users', \Controllers\UserController::class . ':getUsers');
+$app->get('/users/{mail}/{password}', \Controllers\PromoController::class . ':getPromos');
 $app->get('/promos', \Controllers\PromoController::class . ':getPromos');
-
 
 $app->run();
