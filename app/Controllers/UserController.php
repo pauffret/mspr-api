@@ -51,9 +51,15 @@ class UserController
    */
   public static function getUserById($request, $response, $args)
   {
-//    $user = R::getAll('SELECT * FROM user WHERE id=?', [$args['id']]);
-    $user = R::load('user', $args['id']);
-    return $response->withJson(['data' => $user]);
+    $user = R::getAll('SELECT * FROM user');
+//    $user = R::load('user', $args['userId']);
+    return $response->withJson($user);
+  }
+
+  public function getUsers($request, $response, $args)
+  {
+    $users = R::getAll('SELECT * FROM user');
+    return $response->withJson($users);
   }
 
   /**
