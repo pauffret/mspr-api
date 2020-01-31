@@ -22,44 +22,18 @@ class UserController
     $newUser = R::dispense('user');
     $newUser->mail = $args['mail'];
     $newUser->password = $args['password'];
-    $newUser->firstName = $args['firstName'];
-    $newUser->lastName = $args['lastName'];
+    $newUser->first_name = $args['firstName'];
+    $newUser->last_name = $args['lastName'];
     try {
       $id = R::store($newUser);
     } catch (SQL $e) {
       $id = 0;
     }
-//    $newUser = R::exec('INSERT INTO user VALUES(0, :mail, :password, :firstName, :lastName)', [
-//      ':mail' => $args['mail'],
-//      ':password' => $args['password'],
-//      ':firstName' => $args['firstName'],
-//      ':lastName' => $args['lastName']
-//    ]);
     if ($id !== 0) {
-      return $response->withJson(['data' => $newUser]);
+      return $response->withJson(['data' => 'Utilisateur enregistré']);
     } else {
-      return $response->withJson(['data' => 'Login ou mot de passe incorrect.']);
+      return $response->withJson(['erreur' => 'Une erreur est survenue lors de l\'enregistrement de l\'utilisateur']);
     }
-  }
-
-  /**
-   * Récupération d'un utilisateur en fonction d'un id donné
-   * @param $request
-   * @param $response
-   * @param $args
-   * @return mixed
-   */
-  public static function getUserById($request, $response, $args)
-  {
-    $user = R::getAll('SELECT * FROM user');
-//    $user = R::load('user', $args['userId']);
-    return $response->withJson($user);
-  }
-
-  public function getUsers($request, $response, $args)
-  {
-    $users = R::getAll('SELECT * FROM user');
-    return $response->withJson($users);
   }
 
   /**
