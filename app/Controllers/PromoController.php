@@ -25,17 +25,14 @@ class PromoController
     ]);
     if ($reduc) {
       //Check si la reduc est dispo
-      if ($reduc['end_date'] > date('Y-m-d')) {
+      if ($reduc['end_date'] >= date('Y-m-d')) {
         //Check si le user possède déjà ce code dans sa liste
         $userPromo = R::find('user_promo', 'user_id = ' . $args['userId'] . ' AND promo_id = ' . $reduc['id']);
         if ($userPromo) {
           return $response->withJson(['error' => 'Vous avez déjà scanné ce code de réduction']);
         } else {
-          $newUserPromo = R::dispense('user_promo');
-          $newUserPromo->user_id = $args['userId'];
-          $newUserPromo->promo_id = $reduc['id'];
           try {
-            $id = R::store($newUserPromo);
+            R::exec('INSERT INTO user_promo VALUES(0, ' . $args['userId'] . ', ' . $reduc['id'] . ')');
             return $response->withJson(['data' => 'Le code a bien été ajouté à votre liste de réduction']);
           } catch (SQL $e) {
             return $response->withJson(['error' => 'Une erreur est survenue lors de l\'ajout du code à la liste des réductions']);
