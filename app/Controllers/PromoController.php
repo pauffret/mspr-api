@@ -19,23 +19,28 @@ class PromoController
    */
   public static function scanReduc($request, $response, $args)
   {
-    //Check si le code existe et si il est disponible
-    $reduc = R::find('promo', 'code = ' . $args['code'] . 'AND endDate > ' . date("Y-m-d H:i:s"));
+    //Check si le code existe
+    $reduc = R::find('promo', 'code = ' . $args['code']);
     if ($reduc) {
-      //Check si le user possède déjà ce code dans sa liste
-      $userPromo = R::find('user_promo', 'user_id = ' . $args['userId'] . ' AND promo_id = ' . $reduc['id']);
-      if ($userPromo) {
-        return $response->withJson(['error' => 'Vous avez déjà scanné ce code de réduction']);
-      } else {
-        $newUserPromo = R::dispense('user_promo');
-        $newUserPromo->user_id = $args['userId'];
-        $newUserPromo->promo_id = $reduc['id'];
-        try {
-          $id = R::store($newUserPromo);
-          return $response->withJson(['data' => 'Le code a bien été ajouté à votre liste de réduction']);
-        } catch (SQL $e) {
-          return $response->withJson(['error' => 'Une erreur est survenue lors de l\'ajout du code à la liste des réductions']);
+      //Check si la reduc est dispo
+      if ($reduc['end_date'] <= date('Y-m-d')) {
+        //Check si le user possède déjà ce code dans sa liste
+        $userPromo = R::find('user_promo', 'user_id = ' . $args['userId'] . ' AND promo_id = ' . $reduc['id']);
+        if ($userPromo) {
+          return $response->withJson(['error' => 'Vous avez déjà scanné ce code de réduction']);
+        } else {
+          $newUserPromo = R::dispense('user_promo');
+          $newUserPromo->user_id = $args['userId'];
+          $newUserPromo->promo_id = $reduc['id'];
+          try {
+            $id = R::store($newUserPromo);
+            return $response->withJson(['data' => 'Le code a bien été ajouté à votre liste de réduction']);
+          } catch (SQL $e) {
+            return $response->withJson(['error' => 'Une erreur est survenue lors de l\'ajout du code à la liste des réductions']);
+          }
         }
+      } else {
+        return $response->withJson(['error' => 'Ce code promo n\'est plus disponible']);
       }
     } else {
       return $response->withJson(['error' => 'Ce code promo n\'existe pas']);

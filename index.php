@@ -20,7 +20,7 @@ $configuration = [
 $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 
-// url : http://localhost/mspr-api/index.php/users
+// url : http://localhost/mspr-api/index.php/*
 
 $app->get('/insert_user/{mail}/{password}/{firstName}/{lastName}', \Controllers\UserController::class . ':insertUser');
 $app->get('/getUserById/{userId}', \Controllers\UserController::class . ':getUserById');
