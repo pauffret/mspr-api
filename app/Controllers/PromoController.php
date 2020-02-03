@@ -20,10 +20,12 @@ class PromoController
   public static function scanReduc($request, $response, $args)
   {
     //Check si le code existe
-    $reduc = R::find('promo', 'code = ' . $args['code']);
+    $reduc = R::getRow('SELECT * FROM promo WHERE code = :code', [
+      ':code' => $args['code']
+    ]);
     if ($reduc) {
       //Check si la reduc est dispo
-      if ($reduc['end_date'] <= date('Y-m-d')) {
+      if ($reduc['end_date'] > date('Y-m-d')) {
         //Check si le user possède déjà ce code dans sa liste
         $userPromo = R::find('user_promo', 'user_id = ' . $args['userId'] . ' AND promo_id = ' . $reduc['id']);
         if ($userPromo) {
