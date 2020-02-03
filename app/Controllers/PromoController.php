@@ -42,6 +42,13 @@ class PromoController
     }
   }
 
+  /**
+   * Renvoi la liste de tous les codes réductions de l'utilisateur choisi
+   * @param $request
+   * @param $response
+   * @param $args
+   * @return mixed
+   */
   public static function listReduc($request, $response, $args)
   {
     $userPromos = R::getCol('SELECT promo_id FROM user_promo WHERE user_id = ' . $args['userId']);

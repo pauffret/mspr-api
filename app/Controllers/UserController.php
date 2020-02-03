@@ -19,20 +19,27 @@ class UserController
    */
   public static function insertUser($request, $response, $args)
   {
-    $newUser = R::dispense('user');
-    $newUser->mail = $args['mail'];
-    $newUser->password = $args['password'];
-    $newUser->first_name = $args['firstName'];
-    $newUser->last_name = $args['lastName'];
-    try {
-      $id = R::store($newUser);
-    } catch (SQL $e) {
-      $id = 0;
-    }
-    if ($id !== 0) {
-      return $response->withJson(['data' => 'Utilisateur enregistré']);
+    //Check si l'e-mail est déjà utilisé
+    $alreadyUse = R::find('user', 'mail = ' . $args['mail']);
+    if ($alreadyUse) {
+      //Ajoute l'utilisateur si l'e-mail n'est pas déjà utilisé
+      $newUser = R::dispense('user');
+      $newUser->mail = $args['mail'];
+      $newUser->password = $args['password'];
+      $newUser->first_name = $args['firstName'];
+      $newUser->last_name = $args['lastName'];
+      try {
+        $id = R::store($newUser);
+      } catch (SQL $e) {
+        $id = 0;
+      }
+      if ($id !== 0) {
+        return $response->withJson(['data' => 'Utilisateur enregistré']);
+      } else {
+        return $response->withJson(['error' => 'Une erreur est survenue lors de l\'enregistrement de l\'utilisateur']);
+      }
     } else {
-      return $response->withJson(['erreur' => 'Une erreur est survenue lors de l\'enregistrement de l\'utilisateur']);
+      return $response->withJson(['error' => 'Un compte avec cette adresse e-mail existe déjà']);
     }
   }
 
@@ -52,7 +59,7 @@ class UserController
     if ($user) {
       return $response->withJson(['data' => $user]);
     } else {
-      return $response->withJson(['data' => 'Login ou mot de passe incorrect.']);
+      return $response->withJson(['error' => 'Login ou mot de passe incorrect.']);
     }
   }
 
