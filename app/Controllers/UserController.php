@@ -24,7 +24,7 @@ class UserController
     $alreadyUse = R::getRow('SELECT * FROM user WHERE mail = :mail', [
       ':mail' => $args['mail']
     ]);
-    if ($alreadyUse) {
+    if (!$alreadyUse) {
       //Ajoute l'utilisateur si l'e-mail n'est pas déjà utilisé
       $newUser = R::dispense('user');
       $newUser->mail = $args['mail'];
