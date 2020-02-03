@@ -20,7 +20,10 @@ class UserController
   public static function insertUser($request, $response, $args)
   {
     //Check si l'e-mail est déjà utilisé
-    $alreadyUse = R::find('user', 'mail = ' . $args['mail']);
+//    $alreadyUse = R::find('user', 'mail = ' . $args['mail']);
+    $alreadyUse = R::getRow('SELECT * FROM user WHERE mail = :mail', [
+      ':mail' => $args['mail']
+    ]);
     if ($alreadyUse) {
       //Ajoute l'utilisateur si l'e-mail n'est pas déjà utilisé
       $newUser = R::dispense('user');
@@ -30,6 +33,8 @@ class UserController
       $newUser->last_name = $args['lastName'];
       try {
         $id = R::store($newUser);
+//        R::exec('INSERT INTO user VALUES(0, ' . $args['mail'] . ', ' . $args['password'] . ', ' . $args['firstName'] . ', ' . $args['lastName'] . ')');
+//        $id = R::getInsertID();
       } catch (SQL $e) {
         $id = 0;
       }
