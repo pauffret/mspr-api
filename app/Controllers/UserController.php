@@ -56,4 +56,17 @@ class UserController
     }
   }
 
+  /**
+   * Renvoi un utilisateur via son ID
+   * @param $request
+   * @param $response
+   * @param $args
+   * @return mixed
+   */
+  public static function getUserById($request, $response, $args)
+  {
+    $user = R::load('user', $args['userId']);
+    return $response->withJson(['data' => $user]);
+  }
+
 }
