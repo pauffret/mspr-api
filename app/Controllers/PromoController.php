@@ -55,7 +55,7 @@ class PromoController
    */
   public static function listReduc($request, $response, $args)
   {
-    $listPromos = R::getAll('SELECT * FROM promo WHERE id IN (SELECT promo_id FROM user_promo WHERE user_id = :userId) ORDER BY end_date ASC', [
+    $listPromos = R::getAll('SELECT * FROM promo WHERE id IN (SELECT promo_id FROM user_promo WHERE user_id = :userId) AND end_date > DATE(NOW()) ORDER BY end_date ASC', [
       ':userId' => $args['userId']
     ]);
     return $response->withJson(['data' => $listPromos]);
