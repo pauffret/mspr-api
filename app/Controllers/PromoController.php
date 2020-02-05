@@ -33,7 +33,7 @@ class PromoController
         } else {
           try {
             R::exec('INSERT INTO user_promo VALUES(0, ' . $args['userId'] . ', ' . $reduc['id'] . ')');
-            return $response->withJson(['data' => 'Le code a bien été ajouté à votre liste de réduction']);
+            return $response->withJson(['data' => 'Le code '. $args['code'] . ' a bien été ajouté à votre liste de réduction']);
           } catch (SQL $e) {
             return $response->withJson(['error' => 'Une erreur est survenue lors de l\'ajout du code à la liste des réductions']);
           }
